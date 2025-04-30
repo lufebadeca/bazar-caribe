@@ -15,7 +15,7 @@ export default function SearchResultsPage() {
   const [isLoading, setIsLoading] = useState(false); // Para mostrar un indicador de carga
   const [error, setError] = useState(null); // Para mostrar mensajes de error
 
-  // useEffect para buscar datos cuando el componente se monta o cuando 'query' cambia
+  // useEffect hookeado a la query para buscar datos on mount o cuando 'query' cambia
   useEffect(() => {
     // Solo buscamos si hay un 'query'
     if (query) {
@@ -58,7 +58,7 @@ export default function SearchResultsPage() {
     return <div className="text-center p-10 text-red-600">{error}</div>;
   }
 
-  // 3. Sin Resultados (y no cargando y sin error)
+  // 3. Sin Resultados (no cargando, no error)
   if (results.length === 0 && query) {
     return (
       <div className="text-center p-10">
@@ -68,7 +68,7 @@ export default function SearchResultsPage() {
     );
   }
 
-  // 4. Mostrar Resultados
+  // 4. Mostrar Resultados si todo OK
   return (
     <div className="container mx-auto p-4 md:p-6">
       <h2 className="text-2xl font-semibold mb-6 text-gray-800">
@@ -77,7 +77,7 @@ export default function SearchResultsPage() {
       {/* grid para mostrar las tarjetas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         {results.map((product) => (
-          // 2. Usa ProductCard aquí, pasando el producto y la key
+          
           <ProductCard key={product._id} product={product} />
         ))}
       </div>

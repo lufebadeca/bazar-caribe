@@ -11,6 +11,7 @@ const formatPriceCOP = (price) => {
 
 // Componente simple para mostrar estrellas (opcional)
 const RatingStars = ({ rating }) => {
+    console.log(typeof rating)
   if (typeof rating !== 'number' || rating <= 0) return null;
   const fullStars = Math.floor(rating);
   const halfStar = rating % 1 >= 0.5;
@@ -54,7 +55,7 @@ export default function ProductDetailPage() {
       console.log(`ProductDetailPage: Buscando producto con ID: ${id}`);
 
       try {
-        const data = await getItemById(id);
+        const data = await getItemById(id); // Llama a la func que accede a
         setProduct(data);
         console.log(`ProductDetailPage: Producto recibido`, data);
       } catch (err) {
@@ -72,9 +73,8 @@ export default function ProductDetailPage() {
     fetchProductDetails();
   }, [id]); // Se ejecuta cada vez que el 'id' en la URL cambie
 
-  // --- Renderizado Condicional ---
+  // --- Renderizado Condicional para dif estados ---
   if (isLoading) {
-    // Podrías mostrar un esqueleto de carga aquí (loading skeleton)
     return <div className="text-center p-10">Cargando detalles del producto...</div>;
   }
 
@@ -83,7 +83,7 @@ export default function ProductDetailPage() {
   }
 
   if (!product) {
-    // Esto no debería pasar si el manejo de error/loading es correcto, pero por si acaso
+    //por si acaso
     return <div className="text-center p-10">No se pudo cargar el producto.</div>;
   }
 
@@ -91,10 +91,15 @@ export default function ProductDetailPage() {
   const { title, description, price, category, images, rating, brand, stock } = product;
   const availableImages = images?.length > 0 ? images : ['https://via.placeholder.com/600x400.png?text=Imagen+no+disponible'];
 
-
   const handleImageClick = (index) => {
     setActiveImageIndex(index);
   };
+
+  const ratingAverage=()=>{
+    const totalRatings = product.rating.length || 0;
+    const sumRatings = product.rating.reduce((acc, rating) => acc + rating, 0) || 0;
+    return totalRatings > 0 ? sumRatings / totalRatings : 0;
+  }
 
   return (
     <div className="container mx-auto p-4 md:p-8">
@@ -132,7 +137,7 @@ export default function ProductDetailPage() {
           {/* Título */}
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{title}</h1>
           {/* Rating */}
-          {rating > 0 && <div className="mb-4"><RatingStars rating={rating} /></div>}
+          {rating.length > 0 && <div className="mb-4"><RatingStars rating={ratingAverage()} /></div>}
           {/* Precio */}
           <p className="text-4xl font-bold text-indigo-700 mb-6">{formatPriceCOP(price)}</p>
           {/* Stock */}

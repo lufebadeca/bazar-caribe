@@ -15,6 +15,12 @@ const formatPriceCOP = (price) => {
 
 // El componente recibe un objeto 'product' como prop
 export default function ProductCard({ product }) {
+
+const ratingAverage=()=>{
+    const totalRatings = product.rating.length || 0;
+    const sumRatings = product.rating.reduce((acc, rating) => acc + rating, 0) || 0;
+    return totalRatings > 0 ? sumRatings / totalRatings : 0;
+    }
   // si 'product' no llega o no tiene _id
   if (!product?._id) {
     return null; // O mostrar un esqueleto/placeholder de tarjeta
@@ -65,12 +71,12 @@ export default function ProductCard({ product }) {
 
         {/* Rating y Categoría (al final) */}
         <div className="flex justify-between items-center mt-2 pt-2 border-t border-gray-100">
-          {rating > 0 ? (
+          {rating.length > 0 ? (
             <div className="flex items-center text-sm text-gray-600">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-yellow-500 mr-1">
                 <path fillRule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.39-3.423 3.352a.75.75 0 0 0 .426 1.285l4.753.39 1.83 4.401c.321.772 1.415.772 1.736 0l1.83-4.401 4.753-.39 3.423-3.352a.75.75 0 0 0-.426-1.285l-4.753-.39-1.83-4.401Z" clipRule="evenodd" />
               </svg>
-              {rating.toFixed(1)}
+              {ratingAverage()}
             </div>
           ) : (
             <div className="text-sm text-gray-400">Sin calificar</div> // Mensaje si no hay rating

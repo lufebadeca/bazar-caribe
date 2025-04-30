@@ -5,7 +5,7 @@ const productSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, 'El título es obligatorio'], // Mensaje de error personalizado
+      required: [true, 'El título es obligatorio'], // Mensaje de error 
       trim: true, // Quita espacios al inicio y final
     },
     description: {
@@ -37,10 +37,10 @@ const productSchema = new mongoose.Schema(
       default: [], // Por defecto, un array vacío
     },
     rating: {
-      type: Number,
+      type: [Number],
       min: [0, 'La calificación no puede ser negativa'],
       max: [5, 'La calificación máxima es 5'], // Asumiendo una escala de 0-5
-      default: 0,
+      default: [0],
     },
     // No necesitas definir createdAt, timestamps: true lo hará por ti
     // Igualmente añadirá updatedAt
