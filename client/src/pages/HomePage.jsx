@@ -4,9 +4,9 @@ import SearchBox from '../components/SearchBox'; // <-- 1. Importa el componente
 export default function HomePage() {
   return (
     // Centra el contenido verticalmente (aproximado) y horizontalmente
-    <div className="flex flex-col items-center justify-center pt-16 md:pt-24">
+    <div className="flex flex-col items-center justify-center pt-12 md:pt-10">
 
-         <img src="/logo-bazar.svg" alt="Logo Bazar Online" className="w-48 h-auto mb-10"/> {/* Ejemplo de logo */}
+         <img src="/Logo3.png" alt="Logo Bazar Online" className="w-50 h-auto mb-10 md:w-70 md:h-70"/> {/* Ejemplo de logo */}
 
         <SearchBox />
 
@@ -14,6 +14,7 @@ export default function HomePage() {
            Busca millones de productos entre nuestras categorías.
         </p>
 
+    
     </div>
   );
 }

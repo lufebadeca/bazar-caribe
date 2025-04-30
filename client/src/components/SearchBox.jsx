@@ -1,4 +1,3 @@
-// src/components/SearchBox.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Hook para navegar programáticamente
 

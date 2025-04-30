@@ -1,4 +1,3 @@
-// src/components/ProductCard.jsx
 import { Link } from 'react-router-dom'; // Para que la tarjeta sea un enlace
 
 // formatear el precio a pesos colombianos
