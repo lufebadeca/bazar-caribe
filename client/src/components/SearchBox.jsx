@@ -14,19 +14,14 @@ export default function SearchBox() {
 
   // Se ejecuta cuando se envía el formulario (Enter o clic en botón)
   const handleSubmit = (event) => {
-    event.preventDefault(); // Evita que la página se recargue (comportamiento por defecto del form)
-    const trimmedSearchTerm = searchTerm.trim(); // Quita espacios al inicio/final
-
-    // Solo navega si hay algo escrito (después de quitar espacios)
-    if (trimmedSearchTerm) {
-      // Usa navigate para ir a /items?search=TERMINO_BUSCADO
-      // encodeURIComponent asegura que caracteres como espacios o "?" se manejen bien en la URL
-      navigate(`/items?search=${encodeURIComponent(trimmedSearchTerm)}`);
-      setSearchTerm(''); // Opcional: Limpiar el input después de buscar
-    } else {
-      console.log("Intento de búsqueda con término vacío.");
-      // Podrías mostrar una alerta o simplemente no hacer nada
-    }
+    event.preventDefault(); // Evita que la página se recargue
+    const trimmedSearchTerm = searchTerm.trim(); // Quita espacios
+  
+    // Ya NO hay 'if' aquí. Navegamos SIEMPRE.
+    // Si trimmedSearchTerm es "", la URL será /items?search=
+    navigate(`/items?search=${encodeURIComponent(trimmedSearchTerm)}`);
+  
+    setSearchTerm(''); // Limpiamos el input después de la búsqueda
   };
 
   return (

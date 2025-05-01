@@ -19,8 +19,9 @@ export default function ProductCard({ product }) {
 const ratingAverage=()=>{
     const totalRatings = product.rating.length || 0;
     const sumRatings = product.rating.reduce((acc, rating) => acc + rating, 0) || 0;
-    return totalRatings > 0 ? sumRatings / totalRatings : 0;
+    return totalRatings > 0 ? Math.round((sumRatings / totalRatings) * 100) / 100 : 0;
     }
+
   // si 'product' no llega o no tiene _id
   if (!product?._id) {
     return null; // O mostrar un esqueleto/placeholder de tarjeta

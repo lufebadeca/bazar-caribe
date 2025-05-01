@@ -51,7 +51,7 @@ const productSchema = new mongoose.Schema(
 );
 
 // Creamos un índice de texto para facilitar la búsqueda por título y descripción
-productSchema.index({ title: 'text', description: 'text' });
+productSchema.index({ title: 'text', description: 'text', category: 'text' });
 
 const Product = mongoose.model('Product', productSchema);
 

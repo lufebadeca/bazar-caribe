@@ -65,4 +65,4 @@ export const createProduct = async (productData) => {
   }
 };
 
-// pendiente PATCH de rating si hay tiempo
+// PATCH para rating si hay tiempo

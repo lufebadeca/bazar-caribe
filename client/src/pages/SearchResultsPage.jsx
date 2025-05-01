@@ -17,34 +17,31 @@ export default function SearchResultsPage() {
 
   // useEffect hookeado a la query para buscar datos on mount o cuando 'query' cambia
   useEffect(() => {
-    // Solo buscamos si hay un 'query'
-    if (query) {
-      // Definimos una función async dentro del effect para poder usar await
-      const fetchResults = async () => {
-        setIsLoading(true); // Empezamos la carga
-        setError(null); // Reseteamos cualquier error anterior
-        try {
-          console.log(`SearchResultsPage: Buscando "${query}"`); // Log
-          const data = await searchItems(query); // Llamamos a la API
-          setResults(data); // Guarda/actualiza los resultados en el estado
-          console.log(`SearchResultsPage: Resultados recibidos`, data); // Log
-        } catch (err) {
-          console.error("SearchResultsPage: Error fetching results", err); // Log
-          setError('Hubo un error al buscar los productos. Intenta de nuevo.'); // Guardamos el mensaje de error
-          setResults([]); // Limpiamos resultados en caso de error
-        } finally {
-          setIsLoading(false); // Terminamos la carga (for both error or success)
-        }
-      };
-
-      fetchResults(); // Ejecutamos la función de búsqueda
-    } else {
-      // Si no hay query, limpiamos los resultados (o podrías mostrar todos como en la API)
-      setResults([]);
-      // Opcional: podrías redirigir a la home si no hay query
-      // navigate('/');
-    }
-  }, [query]); // <-- El array de dependencias: el efecto se re-ejecuta si 'query' cambia
+    // Función async para obtener los datos
+    const fetchResults = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        // Usamos el 'query' obtenido de la URL. Si es null o undefined, lo pasamos como "" a la API.
+        // Nuestra API backend ya sabe que un query vacío significa "traer todos".
+        const currentQuery = query || "";
+        console.log(`SearchResultsPage: Fetching results for query: "${currentQuery}"`);
+        const data = await searchItems(currentQuery); // Llama a la API con el query (o "" si no hay)
+        setResults(data);
+      } catch (err) {
+        console.error("SearchResultsPage: Error fetching results", err);
+        setError('Hubo un error al cargar los productos.');
+        setResults([]); // Limpia resultados en caso de error
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    // Ejecutamos la función SIEMPRE que el componente se monte o 'query' cambie
+    // (incluso si 'query' cambia a null o "").
+    fetchResults();
+  
+  }, [query]); //El efecto se re-ejecuta si 'query' cambia
 
   // --- Renderizado Condicional ---
 
