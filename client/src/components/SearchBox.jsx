@@ -37,10 +37,12 @@ export default function SearchBox() {
         onChange={handleInputChange}
         placeholder="busca lo que quieras..." // Placeholder como Mercado Libre ;)
         className="flex-grow px-5 py-3 text-lg border border-r-0 border-gray-200 rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent" // Input estilizado
+        aria-label="Ingresa lo que quieras encontrar" // ARIA label para accesibilidad, también sirve para la prueba
       />
       <button
         type="submit"
         className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-r-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 transition duration-300" // Botón estilizado
+        aria-label="Buscar" // ARIA label para accesibilidad, también sirve para la prueba
       >
         {/* Icono de Lupa (opcional) - podrías usar una librería de iconos o un SVG */}
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
