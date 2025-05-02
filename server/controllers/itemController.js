@@ -58,11 +58,13 @@ const searchItems = async (req, res) => {
       if (searchQuery) {
         // 3. Si hay término de búsqueda, usar el índice de texto ($text)
         console.log('Realizando búsqueda de texto para:', searchQuery);
-        products = await Product.find(
-          { $text: { $search: searchQuery } },
-          // Opcional: Añadir puntuación de relevancia si se desea ordenar por ella
-          // { score: { $meta: "textScore" } }
-        )
+        products = await Product.find({
+          $text: {
+              $search: searchQuery,
+              $language: "spanish", // Asegurar idioma
+              $diacriticSensitive: false // Forzar insensibilidad
+          }
+      });
         // Opcional: Ordenar por relevancia (requiere añadir el campo 'score' arriba)
         // .sort({ score: { $meta: "textScore" } });
   
