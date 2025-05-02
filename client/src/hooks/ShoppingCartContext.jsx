@@ -6,11 +6,12 @@ export const ShoppingCartProvider = ({children}) => {
     const [cart, setCart] = useState([]);
 
     const addToCart = (product) => {
-        setCart([...cart, product]);
+        console.log(product)
+        setCart(prevCart => [...prevCart, product]);
     }
 
     const removeFromCart = (productId) => {
-        setCart(cart.filter((product) => product.id !== productId));
+        setCart(cart.filter((product) => product._id !== productId));
     }
 
     const clearCart = () => {
@@ -24,6 +25,4 @@ export const ShoppingCartProvider = ({children}) => {
     )
 }
 
-export const useShoppingCart = () => {
-    return useContext(ShoppingCartContext);
-}
+export const useShoppingCart = () => useContext(ShoppingCartContext);

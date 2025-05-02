@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'; // Hook para leer parámetros de la URL (:id)
 import { getItemById } from '../services/api'; // Importa la función para obtener detalles
+import { useShoppingCart } from '../hooks/ShoppingCartContext';
 
 // Reutilizamos la función de formato de ProductCard (o la importas si la moviste)
 const formatPriceCOP = (price) => {
@@ -11,7 +12,6 @@ const formatPriceCOP = (price) => {
 
 // Componente simple para mostrar estrellas (opcional)
 const RatingStars = ({ rating }) => {
-    console.log(typeof rating)
   if (typeof rating !== 'number' || rating <= 0) return null;
   const fullStars = Math.floor(rating);
   const halfStar = rating % 1 >= 0.5;
@@ -45,6 +45,20 @@ export default function ProductDetailPage() {
   const [isLoading, setIsLoading] = useState(true); // Empezamos cargando
   const [error, setError] = useState(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  //estado para saber si el producto esta en el carrito
+  const [inCart, setInCart] = useState(false);
+
+  // Hook para acceder al carrito (context)
+  const {cart, addToCart, removeFromCart  } = useShoppingCart();
+
+  //effect para actualizar estado del carrito
+  useEffect(() => {
+    if (!product) return; // Evitar error si aún no se ha cargado el producto
+
+    const isProductInCart = cart.some(item => item._id === product._id);
+    setInCart(isProductInCart);
+  }, [cart, product]);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -157,12 +171,21 @@ export default function ProductDetailPage() {
             type="button"
             disabled={stock <= 0} // Deshabilitado si no hay stock
             className={`w-full py-3 px-6 rounded-lg text-white font-semibold text-lg transition duration-300 ${
-              stock > 0
-                ? 'bg-blue-600 hover:bg-blue-700'
+              stock > 0 && !inCart
+                ? 'bg-blue-600 hover:bg-blue-700 font-bold'
+                : stock > 0 && inCart ? 'bg-green-600 hover:bg-green-700 font-bold' 
                 : 'bg-gray-400 cursor-not-allowed'
             }`}
+            onClick={(event)=>{
+              if(inCart){
+                removeFromCart(product._id);
+              }else{
+                addToCart(product);
+              }
+              setInCart(!inCart);
+            }}
           >
-            {stock > 0 ? 'Comprar Ahora' : 'Sin Stock'}
+            {stock > 0 && !inCart  ? 'Comprar Ahora' : stock > 0 && inCart ? 'En el carrito' : 'Sin Stock'}
           </button>
           {/* Descripción */}
           <div className="mt-8 pt-6 border-t border-gray-200">

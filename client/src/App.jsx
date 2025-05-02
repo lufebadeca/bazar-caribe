@@ -7,10 +7,13 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import CreateProductPage from './pages/CreateProductPage';
 import HelpPage from './pages/HelpPage';
 import Navbar from './components/Navbar';
+import { ShoppingCartProvider } from './hooks/ShoppingCartContext';
+import Cart from './pages/Cart';
 
 function App() {
   return (
-    <div>
+    <ShoppingCartProvider>
+          <div>
       {/* Opcional: Aquí podrías poner un Navbar/Header que sea visible en todas las páginas */}
       <Navbar />
 
@@ -21,14 +24,17 @@ function App() {
           {/* La ruta dinámica con el parámetro 'id' */}
           <Route path="/items/:id" element={<ProductDetailPage />} />
           <Route path="/create" element={<CreateProductPage />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/help" element={<HelpPage />} />
-          {/* Opcional: Podrías añadir una ruta catch-all para páginas no encontradas */}
-          {/* <Route path="*" element={<h1>404 Not Found</h1>} /> */}
+          {/* ruta catch-all para páginas no encontradas */}
+          <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
       </main>
 
       {/* Opcional: Aquí podrías poner un Footer */}
     </div>
+    </ShoppingCartProvider>
+
   );
 }
 

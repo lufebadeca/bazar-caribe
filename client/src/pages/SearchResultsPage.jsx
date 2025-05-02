@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom'; // Hook para leer query para
 import { searchItems } from '../services/api'; // Importa la función de búsqueda API
 import ProductCard from '../components/ProductCard';
 
+
 export default function SearchResultsPage() {
   // Hook para acceder a los parámetros de búsqueda de la URL
   const [searchParams] = useSearchParams();

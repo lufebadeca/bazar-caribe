@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom'; // Para que la tarjeta sea un enlace
+import { useShoppingCart } from '../hooks/ShoppingCartContext';
+import { FaCartShopping } from "react-icons/fa6";
+import { useState, useEffect } from 'react';
 
 // formatear el precio a pesos colombianos
 const formatPriceCOP = (price) => {
@@ -15,11 +18,20 @@ const formatPriceCOP = (price) => {
 
 // El componente recibe un objeto 'product' como prop
 export default function ProductCard({ product }) {
+    const {cart, addToCart, removeFromCart  } = useShoppingCart();
 
-const ratingAverage=()=>{
-    const totalRatings = product.rating.length || 0;
-    const sumRatings = product.rating.reduce((acc, rating) => acc + rating, 0) || 0;
-    return totalRatings > 0 ? Math.round((sumRatings / totalRatings) * 100) / 100 : 0;
+    const [inCart, setInCart] = useState(false);
+
+    //effect para actualizar estado del carrito
+    useEffect(() => {
+      const isProductInCart = cart.some(item => item._id === product._id);
+      setInCart(isProductInCart);
+    }, [cart, product]);
+
+    const ratingAverage=()=>{
+      const totalRatings = product.rating.length || 0;
+      const sumRatings = product.rating.reduce((acc, rating) => acc + rating, 0) || 0;
+      return totalRatings > 0 ? Math.round((sumRatings / totalRatings) * 100) / 100 : 0;
     }
 
   // si 'product' no llega o no tiene _id
@@ -42,12 +54,28 @@ const ratingAverage=()=>{
     >
       {/* Sección de la Imagen */}
       <div className="relative w-full h-48 sm:h-56 overflow-hidden">
+
+        <div className="z-10 w-12 h-12 rounded-full bg-gray-300/50 top-2 right-2 flex items-center justify-center cursor-pointer absolute" 
+          onClick={(event)=>{
+            event.stopPropagation(); // Stop the event from bubbling up to the Link
+            event.preventDefault();
+            if(inCart){
+              removeFromCart(_id);
+            }else{
+              addToCart(product);
+            }
+            setInCart(!inCart)
+          }}>
+            <FaCartShopping className={`w-6 h-6 ${inCart  ? "like text-red-500": "text-gray-500" }`} />
+        </div>
+
         <img
           src={imageUrl}
           alt={`Imagen de ${title}`}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" // Efecto zoom suave al pasar el mouse
         />
       </div>
+          
 
       {/* Sección del Contenido */}
       <div className="p-4 flex flex-col flex-grow"> {/* flex-grow para que ocupe espacio */}
