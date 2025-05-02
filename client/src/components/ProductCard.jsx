@@ -102,13 +102,18 @@ export default function ProductCard({ product }) {
         <div className="flex justify-between items-center mt-2 pt-2 border-t border-gray-100">
           {rating.length > 0 ? (
             <div className="flex items-center text-sm text-gray-600">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-yellow-500 mr-1">
-                <path fillRule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.39-3.423 3.352a.75.75 0 0 0 .426 1.285l4.753.39 1.83 4.401c.321.772 1.415.772 1.736 0l1.83-4.401 4.753-.39 3.423-3.352a.75.75 0 0 0-.426-1.285l-4.753-.39-1.83-4.401Z" clipRule="evenodd" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="w-4 h-4 text-yellow-500 mr-1"
+              >
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.39 2.463a1 1 0 00-.364 1.118l1.287 3.966c.3.921-.755 1.688-1.54 1.118l-3.39-2.463a1 1 0 00-1.175 0l-3.39 2.463c-.784.57-1.838-.197-1.539-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z" />
               </svg>
               {ratingAverage()}
             </div>
           ) : (
-            <div className="text-sm text-gray-400">Sin calificar</div> // Mensaje si no hay rating
+            <div className="text-sm text-gray-400">Sin calificar</div>
           )}
           <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
             {category || 'Sin categoría'}

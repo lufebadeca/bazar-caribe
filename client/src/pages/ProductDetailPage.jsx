@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'; // Hook para leer parámetros de la URL (:id)
 import { getItemById } from '../services/api'; // Importa la función para obtener detalles
 import { useShoppingCart } from '../hooks/ShoppingCartContext';
+import RatingStars from '../components/RatingStars';
 
 // Reutilizamos la función de formato de ProductCard (o la importas si la moviste)
 const formatPriceCOP = (price) => {
@@ -11,7 +12,7 @@ const formatPriceCOP = (price) => {
 };
 
 // Componente simple para mostrar estrellas (opcional)
-const RatingStars = ({ rating }) => {
+const RatingStarsStd = ({ rating }) => {
   if (typeof rating !== 'number' || rating <= 0) return null;
   const fullStars = Math.floor(rating);
   const halfStar = rating % 1 >= 0.5;
