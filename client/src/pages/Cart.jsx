@@ -1,5 +1,5 @@
 import { useShoppingCart } from "../hooks/ShoppingCartContext";
-import { FaCartShopping } from "react-icons/fa6";
+import { BsFillTrash3Fill } from "react-icons/bs";
 
 // formatear el precio a pesos colombianos
 const formatPriceCOP = (price) => {
@@ -16,6 +16,11 @@ const formatPriceCOP = (price) => {
 
 export default function Cart() {
     const {cart, removeFromCart, clearCart} = useShoppingCart();
+
+    const handleBuy = ()=>{
+        alert("Compra realizada. Ahora me debes "+ formatPriceCOP(total) );
+        clearCart();
+    }
 
     let total = 0;
     cart.forEach(item => {
@@ -38,9 +43,9 @@ export default function Cart() {
                         <p className="text-sm md:text-xl">({item.quantity || 1})</p>
                         <button 
                             onClick={() => removeFromCart(item._id)}
-                            className="text-sm md:text-xl bg-red-300 hover:bg-red-600 text-white px-2 py-1 rounded"
+                            className="text-sm md:text-xl text-red-300 hover:text-red-600 px-2 py-1 rounded"
                         >
-                            Eliminar
+                            <BsFillTrash3Fill />
                         </button>
                     </li>
                 ))}
@@ -48,11 +53,19 @@ export default function Cart() {
             
             <p className="text-xl font-bold p-4">Total: {formatPriceCOP(total)}</p>
             
-            <button onClick={() => clearCart()}
-                className="bg-red-500 hover:bg-red-600 text-white font-bold px-2 py-1 rounded"
-            >
-                Vaciar carrito
-            </button>
+            <div className="flex justify-start gap-8">
+                <button onClick={handleBuy}
+                    className="bg-indigo-500 hover:bg-purple-600 text-white font-bold px-2 py-1 rounded"
+                >
+                    Comprar
+                </button>
+                <button onClick={() => clearCart()}
+                    className="bg-red-500 hover:bg-red-600 text-white font-bold px-2 py-1 rounded"
+                >
+                    Vaciar carrito
+                </button>
+            </div>
+
         </div>
     );
 }
