@@ -11,6 +11,7 @@ Puedes probar la aplicación desplegada aquí:
 ## Funcionalidades Principales
 
 * **Búsqueda de Productos:** Busca productos por coincidencias de palabras completas en título, descripción y categoría.
+* **Carrito de compras:** Permite añadir productos al carrito y ver los productos añadidos.
 * **Listado Completo:** Al realizar una búsqueda con el campo vacío, se muestran todos los productos existentes.
 * **Vista de Resultados:** Presenta los productos encontrados en formato de tarjetas responsivas.
 * **Detalle de Producto:** Muestra información completa del producto seleccionado, incluyendo todas sus imágenes.
@@ -90,6 +91,7 @@ El proyecto sigue una arquitectura Cliente-Servidor desacoplada:
 * `/items`: `SearchResultsPage` (Muestra `ProductCard`s según `?search=...`)
 * `/items/:id`: `ProductDetailPage` (Muestra detalles del producto con ese `id`)
 * `/create`: `CreateProductPage` (Muestra formulario de creación)
+* `/cart`: `CartPage` (Muestra y controla el carrito de compras)
 
 ### Componentes Principales Reutilizables
 
@@ -97,10 +99,13 @@ El proyecto sigue una arquitectura Cliente-Servidor desacoplada:
 * `SearchBox`: Componente de entrada de búsqueda.
 * `ProductCard`: Tarjeta para mostrar resumen de producto en listas.
 
+### Hooks de contexto (Context API)
+* `ShoppingCartContext`: Contexto para el carrito de compras.
+
 ### Manejo de Estado
 
 * Principalmente `useState` para el estado local de los componentes (formularios, datos de API, estado de carga/error).
-* No se implementó un manejador de estado global complejo (como Context API o Redux) para esta versión.
+* Se implementó la API de contexto `useContext` para el manejo del estado global del carrito de compras, implementando la API de localStorage para persistir los datos del carrito.
 
 ### Llamadas API
 
@@ -156,7 +161,6 @@ El proyecto sigue una arquitectura Cliente-Servidor desacoplada:
 * **Autenticación:** No hay sistema de usuarios ni autenticación. Cualquiera puede crear productos.
 * **Búsqueda:** La búsqueda actual (utilizando índice de texto de MongoDB) requiere coincidencias de palabras completas y no soporta búsquedas parciales (ej: buscar "lap" no encontrará "Laptop"). Se podría mejorar usando expresiones regulares (con impacto en rendimiento) o implementando Atlas Search (más complejo).
 * **Imágenes:** Se almacenan solo URLs de imágenes. No hay funcionalidad para subir archivos de imagen al servidor/almacenamiento externo.
-* **Carrito de Compras:** Funcionalidad de carrito no implementada.
 * **Manejo de Errores / UX:** Se podría mejorar la retroalimentación al usuario en caso de errores de API y añadir indicadores de carga más sofisticados (skeletons).
 * **Validaciones:** Se podrían añadir validaciones más robustas tanto en el frontend como en el backend.
 * **Rating:** Actualmente `rating` es un array pensado para recibir nuevos registros y promediar, pero no hay funcionalidad implementada para que los usuarios añadan calificaciones.
