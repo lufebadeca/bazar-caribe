@@ -62,7 +62,7 @@ export default function ProductCard({ product }) {
             if(inCart){
               removeFromCart(_id);
             }else{
-              addToCart(product);
+              addToCart({...product, quantity: 1});
             }
             setInCart(!inCart)
           }}>
