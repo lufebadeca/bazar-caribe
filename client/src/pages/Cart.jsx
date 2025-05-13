@@ -81,38 +81,53 @@ export default function ShoppingCartPage() { // Renombrado para reflejar que es 
                         {cart.map(item => {
                             const itemQuantity = item.quantity || 1;
                             return (
-                                <Link
-                                to={`/items/${item._id}`}
-                                key={item._id}
-                                className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 border border-gray-200 bg-white rounded-lg shadow-sm"
+                                <li 
+                                key={item._id} 
+                                className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-2 border border-gray-200 bg-white rounded-lg shadow-sm"
                                 >
-                                                                    <li key={item._id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 border border-gray-200 bg-white rounded-lg shadow-sm">
-                                    <div className="flex items-center gap-4 w-full sm:w-auto">
+                                {/* --- Contenedor para Imagen y Título/Precio (Child 1) --- */}
+                                {/* En pantallas sm y más, hacemos que este contenedor sea flexible y pueda encogerse */}
+                                <div className="flex items-center gap-2 w-full sm:flex-1 sm:min-w-0"> {/* <--- CAMBIO AQUÍ: sm:w-auto -> sm:flex-1 sm:min-w-0 */}
+                                    <Link
+                                    to={`/items/${item._id}`}
+                                    key={item._id}
+                                    >
                                         <img
-                                            src={item.images?.[0] || 'https://placehold.co/60x60?text=N/A'} // Placeholder mejorado
-                                            alt={item.title}
-                                            className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md flex-shrink-0"
+                                        src={item.images?.[0] || 'https://placehold.co/80x80?text=N/A'} // Placeholder mejorado y tamaño consistente
+                                        alt={item.title}
+                                        className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md flex-shrink-0" // flex-shrink-0 es importante para la imagen
                                         />
-                                        <div className="flex-1 min-w-0"> {/* Para que el texto se trunque bien */}
-                                            <h2 className="text-base sm:text-lg font-semibold text-gray-800 truncate" title={item.title}>{item.title}</h2>
-                                            <p className="text-sm text-gray-500">{formatPriceCOP(item.price)} c/u</p>
-                                        </div>
+                                    </Link>
+                                    
+                                    {/* Este div interno ya está bien para que el truncate funcione */}
+                                    <div className="flex-1 min-w-0"> 
+                                    <h2 
+                                        className="text-base sm:text-lg font-semibold text-gray-800 truncate" // truncate debería funcionar mejor ahora
+                                        title={item.title} // title attribute para ver el nombre completo en hover
+                                    >
+                                        {item.title}
+                                    </h2>
+                                    <p className="text-sm text-gray-500">{formatPriceCOP(item.price)} c/u</p>
                                     </div>
-                                    <div className="flex items-center gap-3 sm:gap-4 mt-2 sm:mt-0 w-full sm:w-auto justify-between">
-                                        <p className="text-sm sm:text-base text-gray-700">Cant: {itemQuantity}</p>
-                                        <p className="text-sm sm:text-base font-medium text-indigo-600 w-24 text-right">
-                                            {formatPriceCOP(item.price * itemQuantity)}
-                                        </p>
-                                        <button
-                                            onClick={() => removeFromCart(item._id)}
-                                            className="text-red-500 hover:text-red-700 p-1 rounded-md transition-colors"
-                                            aria-label={`Quitar ${item.title} del carrito`}
-                                        >
-                                            <BsFillTrash3Fill size={20} />
-                                        </button>
-                                    </div>
+                                </div>
+
+                                {/* --- Contenedor para Cantidad, Subtotal y Botón Eliminar (Child 2) --- */}
+                                <div className="flex items-center gap-2 sm:gap-4 mt-3 sm:mt-0 w-full sm:w-auto justify-between sm:justify-end"> {/* sm:justify-end para alinear a la derecha en vistas más grandes */}
+                                    <p className="text-sm sm:text-base text-gray-700 whitespace-nowrap"> {/* whitespace-nowrap para "Cant: X" */}
+                                    Cant: {itemQuantity}
+                                    </p>
+                                    <p className="text-sm sm:text-base font-medium text-indigo-600 w-28 sm:w-24 text-right whitespace-nowrap"> {/* Ancho y no-wrap para el precio */}
+                                    {formatPriceCOP(item.price * itemQuantity)}
+                                    </p>
+                                    <button
+                                    onClick={() => removeFromCart(item._id)}
+                                    className="text-red-500 hover:text-red-700 p-1 rounded-md transition-colors flex-shrink-0" // flex-shrink-0 para el botón
+                                    aria-label={`Quitar ${item.title} del carrito`}
+                                    >
+                                    <BsFillTrash3Fill size={20} />
+                                    </button>
+                                </div>
                                 </li>
-                                </Link>
                             );
                         })}
                     </ul>

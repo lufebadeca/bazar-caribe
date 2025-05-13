@@ -93,14 +93,15 @@ export default function ProductDetailPage() {
     };
 
     fetchProductDetails();
+
   }, [id]); // Se ejecuta cada vez que el 'id' en la URL cambie
   
     const handleIncrementQuantity = () => {
-      setSelectedQuantity(prev => Math.min(prev + 1, product.stock));
+      incrementQuantity(product._id);
     };
   
     const handleDecrementQuantity = () => {
-      setSelectedQuantity(prev => Math.max(1, prev - 1));
+      decrementQuantity(product._id);
     };
 
   // --- Renderizado Condicional para dif estados ---
@@ -197,12 +198,12 @@ export default function ProductDetailPage() {
               <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-2">
                 Cantidad:
               </label>
-              <div className="flex items-center border border-gray-300 rounded-md max-w-xs shadow-sm">
+              <div className="flex items-center border border-gray-300 rounded-md max-w-[150px] shadow-sm">
                 <button
                   type="button"
                   onClick={handleDecrementQuantity}
                   disabled={selectedQuantity <= 1}
-                  className="px-4 py-2 text-lg font-medium text-gray-600 hover:bg-gray-100 focus:outline-none rounded-l-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-3 py-2 text-lg font-medium text-gray-600 hover:bg-gray-100 focus:outline-none rounded-l-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   aria-label="Disminuir cantidad"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
@@ -211,7 +212,7 @@ export default function ProductDetailPage() {
                 </button>
                 <span
                   id="quantity-display"
-                  className="px-5 py-2 text-lg font-medium text-gray-900 border-l border-r border-gray-300 w-16 text-center bg-white"
+                  className="px-5 py-2 text-lg font-medium text-gray-900 border-l border-r border-gray-300 w-12 text-center bg-white"
                   aria-live="polite"
                 >
                   {selectedQuantity}
@@ -220,7 +221,7 @@ export default function ProductDetailPage() {
                   type="button"
                   onClick={handleIncrementQuantity}
                   disabled={selectedQuantity >= stock}
-                  className="px-4 py-2 text-lg font-medium text-gray-600 hover:bg-gray-100 focus:outline-none rounded-r-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-3 py-2 text-lg font-medium text-gray-600 hover:bg-gray-100 focus:outline-none rounded-r-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   aria-label="Aumentar cantidad"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
