@@ -10,7 +10,7 @@ export default function Footer() {
     <footer className="bg-slate-800 text-slate-400 dark:bg-gray-950 dark:text-slate-500 py-8 border-t border-slate-700 dark:border-gray-800 position-sticky bottom-0">
       <div className="container mx-auto px-4 text-center">
         <p className="text-sm mb-1">
-          &copy; {currentYear} Bazar Online. Todos los derechos reservados.
+          &copy; {currentYear} Tienda Online. Todos los derechos reservados.
         </p>
         <p className="text-xs">
           Todo lo que buscas, sin complicaciones. </p>

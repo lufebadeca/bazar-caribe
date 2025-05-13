@@ -1,5 +1,8 @@
-import { useShoppingCart } from "../hooks/ShoppingCartContext";
+import { useShoppingCart } from "../hooks/ShoppingCartContext"; // Asegúrate que la ruta sea correcta
 import { BsFillTrash3Fill } from "react-icons/bs";
+import InfoModal from "../components/InfoModal";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 // formatear el precio a pesos colombianos
 const formatPriceCOP = (price) => {
@@ -9,63 +12,134 @@ const formatPriceCOP = (price) => {
     return price.toLocaleString('es-CO', {
       style: 'currency',
       currency: 'COP',
-      minimumFractionDigits: 0, // Sin centavos
-      maximumFractionDigits: 0, // Sin centavos
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     });
-  };
+};
 
-export default function Cart() {
-    const {cart, removeFromCart, clearCart} = useShoppingCart();
+// Asumo que este es tu componente ShoppingCartPage.jsx o Cart.jsx
+export default function ShoppingCartPage() { // Renombrado para reflejar que es una página
+    const { cart, removeFromCart, clearCart, getCartTotal } = useShoppingCart(); // Asumimos que getCartTotal existe o lo calculamos
 
-    const handleBuy = ()=>{
-        alert("Compra realizada. Ahora me debes "+ formatPriceCOP(total) );
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Usa getCartTotal del contexto si existe, sino calcula localmente
+    const grandTotal = typeof getCartTotal === 'function' ? getCartTotal() : 0;
+
+    // Esta función ABRIRÁ el modal
+    const handleInitiatePurchase = () => {
+        if (cart.length === 0) {
+            alert("No hay productos en el carrito");
+            return;
+        }
+        setIsModalOpen(true); // Abre el modal
+    };
+
+    // Esta función se ejecutará CUANDO el modal se envíe con éxito
+    const handleConfirmPurchaseWithInfo = (customerName, customerAddress) => {
+        // 1. Construir el mensaje detallado para WhatsApp (AHORA CON NOMBRE Y DIRECCIÓN)
+        let messageLines = ["¡Hola! 👋 Quisiera realizar el siguiente pedido desde Bazar Online:"];
+        messageLines.push("-----------------------------------");
+        messageLines.push(`👤 Cliente: ${customerName}`);
+        messageLines.push(`🚚 Dirección: ${customerAddress}`);
+        messageLines.push("-----------------------------------");
+        messageLines.push("🛒 Pedido:");
+
+        cart.forEach(item => {
+            const itemQuantity = item.quantity || 1;
+            const unitPriceFormatted = formatPriceCOP(item.price);
+            const subtotalFormatted = formatPriceCOP(item.price * itemQuantity);
+            messageLines.push(`   🛍️ ${item.title}`);
+            messageLines.push(`      Cantidad: ${itemQuantity}`);
+            messageLines.push(`      Precio Unitario: ${unitPriceFormatted}`);
+            messageLines.push(`      Subtotal: ${subtotalFormatted}`);
+            messageLines.push("   --------------------------------");
+        });
+
+        const totalFormatted = formatPriceCOP(grandTotal);
+        messageLines.push(`TOTAL DEL PEDIDO: *${totalFormatted}*`);
+        messageLines.push("-----------------------------------");
+        messageLines.push("¡Espero la confirmación y los pasos a seguir! 😊");
+
+        const whatsappMessage = messageLines.join('\n');
+        const encodedMessage = encodeURIComponent(whatsappMessage);
+        const whatsappUrl = `https://wa.me/573004158815?text=${encodedMessage}`; // REEMPLAZA CON TU NÚMERO
+
         clearCart();
-    }
-
-    let total = 0;
-    cart.forEach(item => {
-        total += item.price;
-    });
+        setIsModalOpen(false); // Cierra el modal
+        window.location.href = whatsappUrl; // Redirige a WhatsApp
+    };
 
     return (
-        <div className="p-4">
-            <h1 className="text-xl font-bold p-4">Carrito</h1>
-            <ul className="flex flex-col gap-4 p-4 border border-gray-200 bg-white rounded">
-                {cart.map(item => (
-                    <li key={item._id} className="flex justify-between items-center gap-4 ">
-                        <img 
-                            src={item.images[0]}
-                            alt={item.title}
-                            className="w-12 h-12 md:w-18 md:h-18 object-cover rounded-2xl flex-shrink-0"
-                        />
-                        <h2 className="flex-1 text-sm md:text-xl flex-truncate">{item.title}</h2>
-                        <p className="text-sm md:text-xl flex-right">{formatPriceCOP(item.price)}</p>
-                        <p className="text-sm md:text-xl">({item.quantity || 1})</p>
-                        <button 
-                            onClick={() => removeFromCart(item._id)}
-                            className="text-sm md:text-xl text-red-300 hover:text-red-600 px-2 py-1 rounded"
-                        >
-                            <BsFillTrash3Fill />
-                        </button>
-                    </li>
-                ))}
-            </ul>
-            
-            <p className="text-xl font-bold p-4">Total: {formatPriceCOP(total)}</p>
-            
-            <div className="flex justify-start gap-8">
-                <button onClick={handleBuy}
-                    className="bg-indigo-500 hover:bg-purple-600 text-white font-bold px-2 py-1 rounded"
-                >
-                    Comprar
-                </button>
-                <button onClick={() => clearCart()}
-                    className="bg-red-500 hover:bg-red-600 text-white font-bold px-2 py-1 rounded"
-                >
-                    Vaciar carrito
-                </button>
-            </div>
-
+        <div className="container mx-auto p-4 md:p-8 max-w-2xl"> {/* Estilo mejorado para la página */}
+            <h1 className="text-3xl font-bold text-gray-800 mb-6 border-b pb-4">Tu Carrito de Compras</h1>
+            {cart.length === 0 ? (
+                <p className="text-gray-600 text-center py-10">Tu carrito está vacío. ¡Empieza a añadir productos!</p>
+            ) : (
+                <>
+                    <ul className="space-y-4"> {/* Mejor espaciado entre ítems */}
+                        {cart.map(item => {
+                            const itemQuantity = item.quantity || 1;
+                            return (
+                                <Link
+                                to={`/items/${item._id}`}
+                                key={item._id}
+                                className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 border border-gray-200 bg-white rounded-lg shadow-sm"
+                                >
+                                                                    <li key={item._id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 border border-gray-200 bg-white rounded-lg shadow-sm">
+                                    <div className="flex items-center gap-4 w-full sm:w-auto">
+                                        <img
+                                            src={item.images?.[0] || 'https://placehold.co/60x60?text=N/A'} // Placeholder mejorado
+                                            alt={item.title}
+                                            className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md flex-shrink-0"
+                                        />
+                                        <div className="flex-1 min-w-0"> {/* Para que el texto se trunque bien */}
+                                            <h2 className="text-base sm:text-lg font-semibold text-gray-800 truncate" title={item.title}>{item.title}</h2>
+                                            <p className="text-sm text-gray-500">{formatPriceCOP(item.price)} c/u</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3 sm:gap-4 mt-2 sm:mt-0 w-full sm:w-auto justify-between">
+                                        <p className="text-sm sm:text-base text-gray-700">Cant: {itemQuantity}</p>
+                                        <p className="text-sm sm:text-base font-medium text-indigo-600 w-24 text-right">
+                                            {formatPriceCOP(item.price * itemQuantity)}
+                                        </p>
+                                        <button
+                                            onClick={() => removeFromCart(item._id)}
+                                            className="text-red-500 hover:text-red-700 p-1 rounded-md transition-colors"
+                                            aria-label={`Quitar ${item.title} del carrito`}
+                                        >
+                                            <BsFillTrash3Fill size={20} />
+                                        </button>
+                                    </div>
+                                </li>
+                                </Link>
+                            );
+                        })}
+                    </ul>
+                    <div className="mt-8 pt-6 border-t border-gray-200">
+                        <div className="flex justify-end items-center mb-6">
+                            <p className="text-xl md:text-2xl font-bold text-gray-800">Total: {formatPriceCOP(grandTotal)}</p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row justify-end gap-4">
+                            <button onClick={() => clearCart()}
+                                className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-6 py-3 rounded-md transition-colors text-center"
+                            >
+                                Vaciar Carrito
+                            </button>
+                            <button onClick={handleInitiatePurchase}
+                                className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8 py-3 rounded-md transition-colors text-center text-lg"
+                            >
+                                Confirmar Pedido por WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </>
+            )}
+            <InfoModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)} // Función para cerrar el modal
+                onSubmit={handleConfirmPurchaseWithInfo} // Función que se llama al confirmar en el modal
+            />
         </div>
     );
 }

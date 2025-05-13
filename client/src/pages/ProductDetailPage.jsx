@@ -12,32 +12,32 @@ const formatPriceCOP = (price) => {
 };
 
 // Componente simple para mostrar estrellas (opcional)
-const RatingStarsStd = ({ rating }) => {
-  if (typeof rating !== 'number' || rating <= 0) return null;
-  const fullStars = Math.floor(rating);
-  const halfStar = rating % 1 >= 0.5;
-  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-  return (
-    <div className="flex items-center">
-      {[...Array(fullStars)].map((_, i) => (
-        <svg key={`full-${i}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-yellow-500">
-          <path fillRule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.39-3.423 3.352a.75.75 0 0 0 .426 1.285l4.753.39 1.83 4.401c.321.772 1.415.772 1.736 0l1.83-4.401 4.753-.39 3.423-3.352a.75.75 0 0 0-.426-1.285l-4.753-.39-1.83-4.401Z" clipRule="evenodd" />
-        </svg>
-      ))}
-      {halfStar && (
-         <svg key="half" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-yellow-500">
-           <path fillRule="evenodd" d="M10 1.344l1.83 4.401 4.753.39-3.423 3.352.95 4.691L10 11.837V1.344z" clipRule="evenodd" />
-         </svg>
-      )}
-      {[...Array(emptyStars)].map((_, i) => (
-        <svg key={`empty-${i}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-300">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.31h5.418a.563.563 0 0 1 .372.959l-4.386 3.176a.563.563 0 0 0-.22.57l1.634 5.401a.563.563 0 0 1-.813.625l-4.38-3.175a.563.563 0 0 0-.653 0l-4.38 3.175a.563.563 0 0 1-.813-.625l1.634-5.4a.563.563 0 0 0-.22-.57L1.634 9.88a.563.563 0 0 1 .372-.96h5.418a.563.563 0 0 0 .475-.31L9.48 3.5Z" />
-       </svg>
-      ))}
-       <span className="ml-2 text-sm text-gray-600">({rating.toFixed(1)})</span>
-    </div>
-  );
-};
+// const RatingStarsStd = ({ rating }) => {
+//   if (typeof rating !== 'number' || rating <= 0) return null;
+//   const fullStars = Math.floor(rating);
+//   const halfStar = rating % 1 >= 0.5;
+//   const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+//   return (
+//     <div className="flex items-center">
+//       {[...Array(fullStars)].map((_, i) => (
+//         <svg key={`full-${i}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-yellow-500">
+//           <path fillRule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.39-3.423 3.352a.75.75 0 0 0 .426 1.285l4.753.39 1.83 4.401c.321.772 1.415.772 1.736 0l1.83-4.401 4.753-.39 3.423-3.352a.75.75 0 0 0-.426-1.285l-4.753-.39-1.83-4.401Z" clipRule="evenodd" />
+//         </svg>
+//       ))}
+//       {halfStar && (
+//          <svg key="half" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-yellow-500">
+//            <path fillRule="evenodd" d="M10 1.344l1.83 4.401 4.753.39-3.423 3.352.95 4.691L10 11.837V1.344z" clipRule="evenodd" />
+//          </svg>
+//       )}
+//       {[...Array(emptyStars)].map((_, i) => (
+//         <svg key={`empty-${i}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-300">
+//           <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.31h5.418a.563.563 0 0 1 .372.959l-4.386 3.176a.563.563 0 0 0-.22.57l1.634 5.401a.563.563 0 0 1-.813.625l-4.38-3.175a.563.563 0 0 0-.653 0l-4.38 3.175a.563.563 0 0 1-.813-.625l1.634-5.4a.563.563 0 0 0-.22-.57L1.634 9.88a.563.563 0 0 1 .372-.96h5.418a.563.563 0 0 0 .475-.31L9.48 3.5Z" />
+//        </svg>
+//       ))}
+//        <span className="ml-2 text-sm text-gray-600">({rating.toFixed(1)})</span>
+//     </div>
+//   );
+// };
 
 
 export default function ProductDetailPage() {
@@ -46,21 +46,28 @@ export default function ProductDetailPage() {
   const [isLoading, setIsLoading] = useState(true); // Empezamos cargando
   const [error, setError] = useState(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
 
   //estado para saber si el producto esta en el carrito
   const [inCart, setInCart] = useState(false);
-
   // Hook para acceder al carrito (context)
-  const {cart, addToCart, removeFromCart  } = useShoppingCart();
-
-  //effect para actualizar estado del carrito
+  const {cart, addToCart, removeFromCart, incrementQuantity, decrementQuantity  } = useShoppingCart();
+  
+  // Efecto para sincronizar 'inCart' y 'selectedQuantity' con el carrito global
   useEffect(() => {
-    if (!product) return; // Evitar error si aún no se ha cargado el producto
+    if (!product || !cart) return; // Si no hay producto cargado o carrito, no hacer nada
 
-    const isProductInCart = cart.some(item => item._id === product._id);
-    setInCart(isProductInCart);
-  }, [cart, product]);
+    const itemInCart = cart.find(item => item._id === product._id);
 
+    if (itemInCart) {
+      setInCart(true);
+      setSelectedQuantity(itemInCart.quantity); // Establece la cantidad desde el carrito
+    } else {
+      setInCart(false);
+      setSelectedQuantity(1); // Si no está en el carrito, la cantidad seleccionable por defecto es 1
+    }
+  }, [product, cart]); // Dependencias: producto cargado y el carrito global
+  
   useEffect(() => {
     const fetchProductDetails = async () => {
       // Reiniciamos estados al empezar la carga
@@ -68,7 +75,7 @@ export default function ProductDetailPage() {
       setError(null);
       setProduct(null);
       console.log(`ProductDetailPage: Buscando producto con ID: ${id}`);
-
+      
       try {
         const data = await getItemById(id); // Llama a la func que accede a
         setProduct(data);
@@ -76,7 +83,7 @@ export default function ProductDetailPage() {
       } catch (err) {
         console.error(`ProductDetailPage: Error fetching product ${id}`, err);
         if (err.response && (err.response.status === 404 || err.message.includes('inválido'))) {
-             setError('Producto no encontrado o ID inválido.');
+          setError('Producto no encontrado o ID inválido.');
         } else {
              setError('Error al cargar los detalles del producto.');
         }
@@ -87,6 +94,14 @@ export default function ProductDetailPage() {
 
     fetchProductDetails();
   }, [id]); // Se ejecuta cada vez que el 'id' en la URL cambie
+  
+    const handleIncrementQuantity = () => {
+      setSelectedQuantity(prev => Math.min(prev + 1, product.stock));
+    };
+  
+    const handleDecrementQuantity = () => {
+      setSelectedQuantity(prev => Math.max(1, prev - 1));
+    };
 
   // --- Renderizado Condicional para dif estados ---
   if (isLoading) {
@@ -115,6 +130,15 @@ export default function ProductDetailPage() {
     const sumRatings = product.rating.reduce((acc, rating) => acc + rating, 0) || 0;
     return totalRatings > 0 ? sumRatings / totalRatings : 0;
   }
+
+  const handleAddToCart = (product) => {
+    if (selectedQuantity <= 0 || selectedQuantity > stock) {
+      alert('Por favor, selecciona una cantidad válida.');
+      return; 
+    }
+    addToCart({ ...product, quantity: selectedQuantity });
+    setInCart(true);
+  };
 
   return (
     <div className="container mx-auto p-4 md:p-8">
@@ -167,7 +191,48 @@ export default function ProductDetailPage() {
               </span>
             )}
           </div>
-          {/* Botón Comprar (Dummy) */}
+
+          {stock > 0 && ( // Solo mostrar si hay stock
+            <div className="mb-6">
+              <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-2">
+                Cantidad:
+              </label>
+              <div className="flex items-center border border-gray-300 rounded-md max-w-xs shadow-sm">
+                <button
+                  type="button"
+                  onClick={handleDecrementQuantity}
+                  disabled={selectedQuantity <= 1}
+                  className="px-4 py-2 text-lg font-medium text-gray-600 hover:bg-gray-100 focus:outline-none rounded-l-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  aria-label="Disminuir cantidad"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
+                  </svg>
+                </button>
+                <span
+                  id="quantity-display"
+                  className="px-5 py-2 text-lg font-medium text-gray-900 border-l border-r border-gray-300 w-16 text-center bg-white"
+                  aria-live="polite"
+                >
+                  {selectedQuantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleIncrementQuantity}
+                  disabled={selectedQuantity >= stock}
+                  className="px-4 py-2 text-lg font-medium text-gray-600 hover:bg-gray-100 focus:outline-none rounded-r-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  aria-label="Aumentar cantidad"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
+
+          
+          {/* Botón Comprar en carrito */}
           <button
             type="button"
             disabled={stock <= 0} // Deshabilitado si no hay stock
@@ -181,7 +246,7 @@ export default function ProductDetailPage() {
               if(inCart){
                 removeFromCart(product._id);
               }else{
-                addToCart(product);
+                handleAddToCart(product);
               }
               setInCart(!inCart);
             }}
