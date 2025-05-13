@@ -6,9 +6,10 @@ const {
   searchItems,
   getItemById,
 } = require('../controllers/itemController'); // Importamos los controladores
+const { uploadMultipleImages } = require('../middleware/multerUpload');
 
 // Ruta para crear un producto
-router.post('/create', createProduct);
+router.post('/create', uploadMultipleImages, createProduct);
 
 // Ruta para buscar productos (la query 'q' se lee desde req.query en el controlador)
 router.get('/items', searchItems);

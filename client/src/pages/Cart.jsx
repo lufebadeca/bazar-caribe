@@ -28,9 +28,9 @@ export default function Cart() {
     });
 
     return (
-        <div>
+        <div className="p-4">
             <h1 className="text-xl font-bold p-4">Carrito</h1>
-            <ul className="flex flex-col gap-4 p-4 border border-gray-200 bg-gray-100">
+            <ul className="flex flex-col gap-4 p-4 border border-gray-200 bg-white rounded">
                 {cart.map(item => (
                     <li key={item._id} className="flex justify-between items-center gap-4 ">
                         <img 

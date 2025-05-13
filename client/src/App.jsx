@@ -9,15 +9,16 @@ import HelpPage from './pages/HelpPage';
 import Navbar from './components/Navbar';
 import { ShoppingCartProvider } from './hooks/ShoppingCartContext';
 import Cart from './pages/Cart';
+import Footer from './components/Footer';
 
 function App() {
   return (
     <ShoppingCartProvider>
-          <div>
+    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-slate-900">
       {/* Opcional: Aquí podrías poner un Navbar/Header que sea visible en todas las páginas */}
       <Navbar />
 
-      <main className="p-4"> {/* Un padding general para el contenido */}
+      <main className="flex-grow container mx-auto p-4 md:p-6 flex flex-col"> {/* Un padding general para el contenido */}
         <Routes> {/* Define el área donde cambiarán las páginas */}
           <Route path="/" element={<HomePage />} />
           <Route path="/items" element={<SearchResultsPage />} />
@@ -31,7 +32,7 @@ function App() {
         </Routes>
       </main>
 
-      {/* Opcional: Aquí podrías poner un Footer */}
+      <Footer />
     </div>
     </ShoppingCartProvider>
 

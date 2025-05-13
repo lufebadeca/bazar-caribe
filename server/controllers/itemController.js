@@ -1,31 +1,91 @@
 const mongoose = require('mongoose');
 // server/controllers/itemController.js
 const Product = require('../models/Product'); // Importamos el modelo
+const cloudinary = require('../config/cloudinary');
 
 // @desc    Crear un nuevo producto
 // @route   POST /api/create
 // @access  Public (por ahora)
 const createProduct = async (req, res) => {
+  console.log('--- Controlador createProduct INVOCADO ---');
+  console.log('req.body (datos de texto):', JSON.stringify(req.body, null, 2));
+  console.log('req.files (archivos de Multer):', req.files);
     try {
       // 1. Recoger datos del body. campos coinciden con nuestro Schema.
-      const productData = req.body;
+      const productDataFromForm = req.body;
+      let imageUrls = [];
   
-      // validations?
+      if (req.files && req.files.length > 0) {
+        console.log(`RECIBIDOS ${req.files.length} archivos de Multer. Intentando subir a Cloudinary con upload_stream...`);
   
-      // 2. Crear nueva instancia del modelo Product
-      //    Mongoose aplicará los valores por defecto (stock: 0, rating: 0) si no vienen.
-      const newProduct = new Product(productData);
+        // Usamos Promise.all para esperar que todas las subidas terminen
+        const uploadPromises = req.files.map(file => {
+          console.log(`Procesando archivo para stream: ${file.originalname}`);
+          return new Promise((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+              {
+                folder: 'bazar_online_products', // Opcional: tu carpeta en Cloudinary
+                resource_type: 'auto' // Permite a Cloudinary detectar el tipo de archivo
+              },
+              (error, result) => {
+                if (error) {
+                  console.error(`Error en Cloudinary upload_stream para ${file.originalname}:`, error);
+                  return reject(error);
+                }
+                if (!result || !result.secure_url) {
+                  console.error(`Respuesta inválida de Cloudinary para ${file.originalname}:`, result);
+                  return reject(new Error('Respuesta inválida de Cloudinary después de la subida.'));
+                }
+                console.log(`Imagen subida a Cloudinary (stream): ${result.secure_url}`);
+                resolve(result.secure_url);
+              }
+            );
+            // Enviamos el buffer del archivo al stream
+            uploadStream.end(file.buffer);
+          });
+        });
   
-      // 3. Guardar en la base de datos
-      //    Mongoose también ejecutará las validaciones del Schema aquí (required, min, etc.)
+        // Esperamos que todas las promesas de subida se resuelvan
+        imageUrls = await Promise.all(uploadPromises);
+        console.log('Todas las imágenes subidas. URLs:', imageUrls);
+  
+      } else {
+        console.log('No se recibieron archivos de Multer en req.files.');
+        // ... (tu lógica de fallback para imageUrls de texto si la tienes) ...
+      }
+  
+      console.log('URLs de imágenes finales a guardar:', imageUrls);
+  
+      const finalProductData = {
+        title: productDataFromForm.title,
+        description: productDataFromForm.description,
+        price: parseFloat(productDataFromForm.price),
+        brand: productDataFromForm.brand,
+        stock: parseInt(productDataFromForm.stock, 10),
+        category: productDataFromForm.category,
+        images: imageUrls,
+      };
+  
+      // ... (tus validaciones y guardado en MongoDB como antes) ...
+      const requiredFields = ['title', 'description', 'price', 'stock', 'category'];
+      const missingField = requiredFields.find(field => !finalProductData[field]);
+      if (missingField) {
+            return res.status(400).json({ message: `El campo '${missingField}' es obligatorio.` });
+      }
+      if (isNaN(finalProductData.price) || finalProductData.price < 0) {
+          return res.status(400).json({ message: 'El precio debe ser un número positivo.' });
+      }
+      if (isNaN(finalProductData.stock) || finalProductData.stock < 0) {
+          return res.status(400).json({ message: 'El stock debe ser un número entero positivo o cero.' });
+      }
+  
+      const newProduct = new Product(finalProductData);
       const savedProduct = await newProduct.save();
-  
-      // 4. Responder con éxito (201 Creado) y el producto guardado
-      console.log('Producto creado:', savedProduct); // Log para el servidor
+      console.log('Producto guardado en MongoDB:', savedProduct);
       res.status(201).json(savedProduct);
-  
+    
     } catch (error) {
-      // 5. Manejar errores
+      // 7. Manejar errores
       console.error('Error en createProduct:', error);
   
       // Si es un error de validación de Mongoose (común si faltan campos requeridos)

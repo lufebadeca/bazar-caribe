@@ -11,8 +11,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 flex justify-between items-center">
         {/* Logo/Brand Name */}
         <Link to="/" className="text-xl sm:text-2xl font-bold hover:text-purple-200 transition duration-300 ease-in-out flex-shrink-0 flex flex-col md:flex-row items-center"> {/* Ajuste tamaño fuente y evita que se encoja */}
-          <img src="/bazar-logo.png" alt="Logo Bazar Online" className="w-14 h-14 md:w-18 md:h-18 mr-2 "/>
-          <span className="text-sm font-bold hover:text-purple-200 transition duration-300 ease-in-out md:text-2xl">Bazar Caribe</span>
+          <img src="/bazar-logo.png" alt="Logo Bazar Online" className="w-11 h-11 md:w-14 md:h-14 mr-2 "/>
+          <span className="text-sm font-bold hover:text-purple-200 transition duration-300 ease-in-out md:text-2xl">Rossy Shop</span>
         </Link>
 
         {/* Navigation Links */}

@@ -8,9 +8,9 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 // 2. Crea una instancia de Axios con la URL base
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  //headers: {
+    //'Content-Type': 'application/json',
+  //},
 });
 
 // 3. Define las funciones para llamar a cada endpoint
@@ -54,14 +54,27 @@ export const getItemById = async (id) => {
  * @param {Object} productData - Los datos del producto a crear.
  * @returns {Promise<Object>} - Una promesa que resuelve al producto recién creado.
  */
-export const createProduct = async (productData) => {
+export const createProduct = async (productFormData) => { // Ahora recibe FormData
   try {
-    // Hacemos un POST a /create con los datos en el cuerpo
-    const response = await apiClient.post('/create', productData);
+    console.log("Servicio API: Enviando FormData para crear producto...");
+    // Al enviar FormData, Axios/navegador establecen Content-Type automáticamente.
+    // Si tu 'apiClient' tiene un 'Content-Type': 'application/json' global,
+    // es posible que necesites omitirlo para esta solicitud específica o crear
+    // una solicitud directa de axios.
+    // La mayoría de las veces, si no hay un header global conflictivo, esto funciona:
+    const response = await apiClient.post('/create', productFormData,
+    // Opcional: Si tienes problemas con headers globales en apiClient:
+    {
+      headers: {
+        'Content-Type': undefined // Esto o 'multipart/form-data' (pero el navegador lo hace mejor)
+      }
+    }
+    );
+    console.log('Servicio API: Respuesta de crear producto:', response.data);
     return response.data;
   } catch (error) {
-    console.error('Error creando producto:', error.response?.data || error.message);
-    throw error;
+    console.error('Servicio API: Error creando producto:', error.response?.data || error.message);
+    throw error; // Relanza para que el componente lo maneje
   }
 };
 
