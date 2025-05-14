@@ -38,7 +38,7 @@ export default function ShoppingCartPage() { // Renombrado para reflejar que es 
     // Esta función se ejecutará CUANDO el modal se envíe con éxito
     const handleConfirmPurchaseWithInfo = (customerName, customerAddress) => {
         // 1. Construir el mensaje detallado para WhatsApp (AHORA CON NOMBRE Y DIRECCIÓN)
-        let messageLines = ["¡Hola! 👋 Quisiera realizar el siguiente pedido desde Bazar Online:"];
+        let messageLines = ["¡Hola! 👋 Quisiera realizar el siguiente pedido desde Rossy shop online:"];
         messageLines.push("-----------------------------------");
         messageLines.push(`👤 Cliente: ${customerName}`);
         messageLines.push(`🚚 Dirección: ${customerAddress}`);
